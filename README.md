@@ -66,10 +66,10 @@ The entire stack is containerized using Docker Compose for easy setup and manage
     ```
     Allow a few minutes for all containers to fully start.
 3. **How to use**
-* Apache Airflow: Access at http://localhost:8080
+* Apache Airflow: Access at http://localhost:8080.
   * Default Username is admin, password will appear in container. You can Ctrl + F and find password.
   * Enable and trigger dag.
-* Apache Superset:
+* Apache Superset: Access at http://localhost:8088.
   * Default Username/Password: admin/admin
   * Connect database and add datasets(were created by dbt)
   * Exlore the transformed data tables and dashboards in Superset.
