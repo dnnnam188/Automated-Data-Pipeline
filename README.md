@@ -41,10 +41,39 @@ The entire stack is containerized using Docker Compose for easy setup and manage
 
 ## 🏗️ Architecture
 ![Achitecture](Architectue.png)
-* Apache Aiflow:
-* dbt(data build tools):
-* PostgreSQL:
-* Apache Superset
-* Docker & Docker compose:
+* Apache Aiflow: Powerfull workflow orchestrator managing DAGs for data ingestion and triggering transformation steps.
+* dbt(data build tools): Uses SQL to define data models, run tests.
+* PostgreSQL: An open-source relational database, serving as the DW for raw and transformed data models.
+* Apache Superset: An open-source BI platform, providing an intuitive interface to build dashboards and explore data.
+* Docker & Docker compose: Containerizes all components.
+
+---
+
+## 🛠️ Setup & Usage Guide
+### Prerequisites
+ * [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+ * [Git](https://git-scm.com/)
+### 
+1. **Clone repo:**
+    ```bash
+    git clone https://github.com/dnnnam188/Automated-Data-Pipeline.git
+    cd repo
+    cd weather_data_project
+    ```
+2. **Docker compose up:**
+    ```bash
+    docker-compose up -d
+    ```
+    Allow a few minutes for all containers to fully start.
+3. **How to use**
+* Apache Airflow: Access at http://localhost:8080
+  * Default Username is admin, password will appear in container. You can Ctrl + F and find password.
+  * Enable and trigger dag.
+* Apache Superset:
+  * Default Username/Password: admin/admin
+  * Connect database and add datasets(were created by dbt)
+  * Exlore the transformed data tables and dashboards in Superset.
+
+
 
 
