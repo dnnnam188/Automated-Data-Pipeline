@@ -1,0 +1,127 @@
+x-superset-user: &superset-user root
+x-superset-volumes: &superset-volumes
+  # /app/pythonpath_docker will be appended to the PYTHONPATH in the final container
+  - ./docker:/app/docker
+  # - ./superset:/app/superset
+  - ./docker/superset_config.py:/app/pythonpath/superset_config.py
+
+services:
+  db:
+    container_name: postgres_container
+    image: postgres:14.17
+    ports:
+      - "5000:5432"
+    environment:
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_password
+      POSTGRES_DB: db
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+      - ./postgres/airflow_init.sql:/docker-entrypoint-initdb.d/airflow_init.sql
+      - ./postgres/superset_init.sql:/docker-entrypoint-initdb.d/superset_init.sql
+
+    networks:
+      - default
+      
+  # aiflow
+  af:
+    container_name: airflow_container
+    image: apache/airflow:3.0.0
+    ports:
+      - "8000:8080"
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@db:5432/airflow_db
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./api_requests:/opt/airflow/api_requests
+      - /var/run/docker.sock:/var/run/docker.sock
+    group_add:
+      - '1001'
+    depends_on:
+      - db
+    networks:
+      - default
+    command: >
+      bash -c "airflow db migrate && airflow standalone"
+  #dbt
+  dbt:
+    container_name: dbt_container
+    image: ghcr.io/dbt-labs/dbt-postgres:1.9.latest
+    volumes:
+      - ./dbt/my_project:/usr/app
+      - ./dbt:/root/.dbt
+    working_dir: /usr/app
+    environment: 
+      DBT_PROFILES_DIR: "/root/.dbt"
+    depends_on:
+      - db
+    networks:
+      - default
+    command: run 
+
+  # superset-init
+  superset-init:
+    image: apache/superset:3.0.0-py310
+    container_name: superset_init
+    command: ["/app/docker/docker-init.sh"]
+    env_file:
+      - path: docker/.env
+        required: true
+    depends_on:
+      db:
+        condition: service_started
+      redis:
+        condition: service_started
+    user: *superset-user
+    volumes: *superset-volumes
+    environment:
+      SUPERSER_LOAD_EXAMPLES: "no"
+      SUPERSET_LOG_LEVEL: "${SUPERSET_LOG_LEVEL:-info}"
+      DATABASE_DB: "superset_db"
+    healthcheck:
+      disable: true
+    networks:
+      - default
+
+  # superset
+  superset:
+    env_file:
+      - path: docker/.env # default
+        required: true
+    image: apache/superset:3.0.0-py310
+    container_name: superset_app
+    command: ["/app/docker/docker-bootstrap.sh", "app"]
+    restart: unless-stopped
+    ports:
+      - 8088:8088
+    user: *superset-user
+    depends_on:
+      superset-init:
+        condition: service_completed_successfully
+    volumes: *superset-volumes
+    environment:
+      SUPERSET_LOG_LEVEL: "${SUPERSET_LOG_LEVEL:-info}"
+      DATABASE_DB: "superset_db"
+    networks:
+      - default
+
+  # redis
+  redis:
+    image: redis:7
+    container_name: superset_cache
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis:/data
+
+
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  redis:
+    external: false
+
