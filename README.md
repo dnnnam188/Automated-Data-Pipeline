@@ -40,8 +40,7 @@ The entire stack is containerized using Docker Compose for easy setup and manage
 
 
 ## 🏗️ Architecture
-![Achitecture](Achitecture.png)
-
+![Achitecture](Architectue.png)
 * Apache Aiflow:
 * dbt(data build tools):
 * PostgreSQL:
