@@ -1,22 +1,29 @@
-# Automated-Data-Pipeline
-
+# End-to-End Data Pipeline Mastery: From Ingestion to Visualization with Airflow, dbt, PostgreSQL, and Superset on WSL
 
 
 End-to-end automated data pipeline, designed to collect weather data, transform it, and make it available for analysis and visualization. Built with a modern data stack, this project demonstrates a robust ETL, ELT workflow.
 
 
+---
+## ✨  Key Highlights & Unique Value Proposition
+
+* **Solve Data Problems:** Transform raw data into clean, reliable and analytics-ready models.
+* **Modern Data Stack Integration:** Gained hands-on experience by integrating tools in Data Engineering(Airflow, dbt) and Business Intelligence (Superset).
+* **WSL2 Optimization:** Ensuring high performance and compatibility.
+* **ELT Workflow:**
+
+  * **Extract & Load (Airflow):** Automated data ingestion from sources (API) into PostgreSQL.
+
+  * **Transform (dbt):** Built structured data models, applied complex business logic, and ensured data quality using dbt tests.
+
+  * **Visualize (Superset):** Created intuitive dashboards and charts, empowering end-users to explore insights flexibly.
+
+* **Khả năng mở rộng:** Thiết kế module và linh hoạt, cho phép dễ dàng thêm nguồn dữ liệu, mô hình biến đổi, và dashboard mới trong tương lai.
+* **Scalable & Modular Design:** The system's design allows for easy integration of new data sources, transformation logic, and dashboards.
 
 ---
-
-
-
 ## 🚀 Project Overview
-
-
-
 This pipeline automates the process of:
-
-
 
 - **Extracting** real-time weather data from WeatherStack API.
 
@@ -28,14 +35,17 @@ This pipeline automates the process of:
 
 - **Visualizing** the transformed data using Apache Superset.
 
-
-
 The entire stack is containerized using Docker Compose for easy setup and management on a Windows 11 machine with WSL.
-
-
-
 ---
 
 
-
 ## 🏗️ Architecture
+![Achitecture](Achitecture.png)
+
+* Apache Aiflow:
+* dbt(data build tools):
+* PostgreSQL:
+* Apache Superset
+* Docker & Docker compose:
+
+
