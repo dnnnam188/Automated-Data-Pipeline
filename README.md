@@ -72,7 +72,7 @@ The entire stack is containerized using Docker Compose for easy setup and manage
 * Apache Superset: Access at http://localhost:8088.
   * Default Username/Password: admin/admin
   * Connect database and add datasets(were created by dbt)
-  * Exlore the transformed data tables and dashboards in Superset.
+  * Explore the transformed data tables and dashboards in Superset.
 
 
 
